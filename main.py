@@ -1,21 +1,23 @@
 import asyncio
 import logging
 
-from aiogram import Bot, Dispatcher
-from aiogram.fsm.storage.memory import MemoryStorage
+from aiogram import Bot
 
 from bot.core import dp, bot
 from bot.handlers.cmd import cmd_router
+from database.engine import create_db, drop_db, session_maker
+from middlewares.db import DataBaseSession
 from settings import settings
 
 
-async def start_bot(bot: Bot):
-    # await create_tables()
+async def start_bot():
+    await drop_db()
+    await create_db()
     # await set_commands(bot)
     await bot.send_message(settings.bots.admin_id, text='Бот запущен')
 
 
-async def stop_bot(bot: Bot):
+async def stop_bot():
     await bot.send_message(settings.bots.admin_id, text='Бот остановлен')
     # scheduler.shutdown()
 
@@ -33,6 +35,7 @@ async def start():
 
 
     # регистрация middlewares
+    dp.update.middleware(DataBaseSession(session_pool=session_maker))
     # dp.update.middleware.register(SchedulerMiddleware(scheduler))
 
     # подключение роутеров
@@ -50,7 +53,9 @@ async def start():
     dp.startup.register(start_bot)
     dp.shutdown.register(stop_bot)
 
-    logger.info('start')
+
+
+    logger.info("Бот запущен!")
 
     try:
         await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types())
