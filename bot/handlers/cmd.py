@@ -3,7 +3,7 @@ from aiogram.filters import CommandStart, Command
 from aiogram.types import Message
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from database.actions import add_user
+from database.actions import add_user_to_db
 
 cmd_router = Router()
 
@@ -11,7 +11,7 @@ cmd_router = Router()
 # отрабатывает по команде /start
 @cmd_router.message(CommandStart())
 async def start_cmd(message:Message, session: AsyncSession) -> None:
-    await add_user(session, 'Vovan')
+    await add_user_to_db(session, message.from_user)
     await message.answer('urjrj')
     # await create_user(message)
     #

@@ -10,7 +10,7 @@ from settings import settings
 # engine = create_async_engine(os.getenv('DB_LITE'), echo=True)
 database_name = settings.db.database_name
 database_url = f'sqlite+aiosqlite:///{database_name}.sqlite'
-engine = create_async_engine(database_url)
+engine = create_async_engine(database_url, echo=True)
 
 session_maker = async_sessionmaker(bind=engine, class_=AsyncSession, expire_on_commit=False)
 

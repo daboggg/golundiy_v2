@@ -11,7 +11,7 @@ from settings import settings
 
 
 async def start_bot():
-    await drop_db()
+    # await drop_db()
     await create_db()
     # await set_commands(bot)
     await bot.send_message(settings.bots.admin_id, text='Бот запущен')

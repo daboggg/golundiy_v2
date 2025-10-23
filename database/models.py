@@ -8,11 +8,16 @@ class Base(DeclarativeBase):
     # updated: Mapped[DateTime] = mapped_column(DateTime, default=func.now(), onupdate=func.now())
 
 
-class User(Base):
+class Person(Base):
     __tablename__ = 'users'
 
-    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    name: Mapped[str] = mapped_column(String(150), nullable=False)
-    # description: Mapped[str] = mapped_column(Text)
-    # price: Mapped[float] = mapped_column(Float(asdecimal=True), nullable=False)
-    # image: Mapped[str] = mapped_column(String(150))
+    # id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    user_id: Mapped[int] = mapped_column(primary_key=True, nullable=False, unique=True)
+    first_name: Mapped[str] = mapped_column(String(20), nullable=True)
+    last_name: Mapped[str] = mapped_column(String(20), nullable=True)
+
+    is_active: Mapped[bool] = mapped_column(default=False)
+
+    msg_received: Mapped[int] = mapped_column(default=0)
+
+    is_privileged: Mapped[bool] = mapped_column(default=False)
